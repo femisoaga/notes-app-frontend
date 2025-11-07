@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
 import { BASE_URL } from "./constants";
 
 const axiosInstance = axios.create({
@@ -10,17 +11,16 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    } catch (err) {
+  (config: InternalAxiosRequestConfig) => {
+    const accessToken = localStorage.getItem("token");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: AxiosError) => {
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;
