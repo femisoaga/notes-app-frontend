@@ -5,24 +5,20 @@ import Home from "./pages/Home/Home";
 import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
-  const token = localStorage.getItem("token");
-
   return (
     <Router>
       <Routes>
-        <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} />
-        
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Signup />} />
-
         <Route
-          path="/home"
+          path="/"
           element={
             <PrivateRoute>
               <Home />
             </PrivateRoute>
           }
         />
+        
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
       </Routes>
     </Router>
   );
